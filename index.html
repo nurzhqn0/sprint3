@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Currency Converter</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2 class="mb-4">Currency Converter</h2>
+
+      <div class="d-flex gap-5 justify-content-between">
+        <form id="currency-form" class="w-50">
+          <strong for="amount" class="form-label">Enter Amount:</strong>
+          <div class="mb-3 w-100 d-flex gap-3 mt-2">
+            <input
+              type="number"
+              id="amount"
+              class="form-control"
+              placeholder="Enter amount"
+              required
+            />
+
+            <select id="currency" class="form-select w-25 pe-4" required>
+              <option value="KZT" selected>KZT</option>
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+            </select>
+          </div>
+        </form>
+
+        <div class="w-25">
+          <strong>KZT (Tenge)</strong>
+          <div class="mt-2 border p-2 rounded">
+            <span id="kzt-result">-</span>
+          </div>
+        </div>
+
+        <div class="w-25">
+          <strong>USD (Dollar)</strong>
+          <div class="mt-2 border p-2 rounded">
+            <span id="usd-result">-</span>
+          </div>
+        </div>
+        <div class="w-25">
+          <strong>EUR (Euro)</strong>
+          <div class="mt-2 border p-2 rounded">
+            <span id="eur-result">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const rates = {
+        KZT: { USD: 1 / 431, EUR: 1 / 507 },
+        USD: { KZT: 429, EUR: 429 / 509 },
+        EUR: { KZT: 507, USD: 507 / 431 },
+      };
+
+      const amountInput = document.getElementById("amount");
+      const currencySelect = document.getElementById("currency");
+
+      amountInput.addEventListener("input", convertCurrency);
+      currencySelect.addEventListener("change", convertCurrency);
+
+      function convertCurrency() {
+        const amount = parseFloat(amountInput.value);
+        const currency = currencySelect.value;
+
+        if (isNaN(amount) || amount <= 0) {
+          document.getElementById("kzt-result").textContent = "-";
+          document.getElementById("usd-result").textContent = "-";
+          document.getElementById("eur-result").textContent = "-";
+          return;
+        }
+
+        if (currency === "KZT") {
+          kzt = "-";
+          usd = (amount * rates.KZT.USD).toFixed(2);
+          eur = (amount * rates.KZT.EUR).toFixed(2);
+        } else if (currency === "USD") {
+          kzt = (amount * rates.USD.KZT).toFixed(2);
+          usd = "-";
+          eur = (amount * rates.USD.EUR).toFixed(2);
+        } else if (currency === "EUR") {
+          kzt = (amount * rates.EUR.KZT).toFixed(2);
+          usd = (amount * rates.EUR.USD).toFixed(2);
+          eur = "-";
+        }
+
+        document.getElementById("kzt-result").textContent = kzt;
+        document.getElementById("usd-result").textContent = usd;
+        document.getElementById("eur-result").textContent = eur;
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
